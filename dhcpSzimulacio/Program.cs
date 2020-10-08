@@ -104,9 +104,9 @@ namespace dhcpSzimulacio
 
         static void feladatok()
         {
-            foreach (var e in commands)
+            foreach (var command in commands)
             {
-                feladat(e);
+                feladat(command);
             }
 
 
@@ -120,10 +120,48 @@ namespace dhcpSzimulacio
             ///először csak "request paranccsal foglalkozunk"
             ///megnezzük hogy a "request"-e
             ///ki kell szedni a MAC címet a parancsból
-
+           
             if (parancs.Contains("request"))
             {
-                Console.WriteLine("Ez ok");
+                string[] a = parancs.Split(';');
+                string mac = a[1];
+
+                if (dhcp.ContainsKey(mac))
+                {
+                    Console.WriteLine($"DHCP {mac} ---> {dhcp[mac]}");
+                }
+                else
+                {
+                    if (reserved.ContainsKey(mac))
+                    {
+                        Console.WriteLine($"Res. {mac} --> {reserved[mac]}");
+                        dhcp.Add(mac, reserved[mac]);
+                    }
+                    else
+                    {
+                        string indulo = "192.168.10.100";
+                        int okt4 = 100;
+
+                        while (okt4<200 && (dhcp.ContainsValue(indulo) || reserved.ContainsValue(indulo) ||
+                            excluded.Contains(indulo)))
+                        {
+                            okt4++;
+                            indulo = CimEggyelNo(indulo);
+                        }
+
+                        if (okt4<200)
+                        {
+                            Console.WriteLine($"kiosztott {mac} --> {indulo}");
+                            dhcp.Add(mac,indulo);
+                        }
+                        else
+                        {
+                            Console.WriteLine($"{mac} nincs IP!");
+                        }
+
+                    }
+                }
+                
             }
             else
             {
@@ -154,15 +192,9 @@ namespace dhcpSzimulacio
             //}
 
 
-            
 
 
-
-
-            feladat("request Ebben nicns semmi");
-
-
-
+            feladatok();
 
 
 
