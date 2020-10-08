@@ -102,9 +102,41 @@ namespace dhcpSzimulacio
             
         }
 
+        static void feladatok()
+        {
+            foreach (var e in commands)
+            {
+                feladat(e);
+            }
+
+
+        }
+
+
+
+        static void feladat(string parancs)
+        {
+            ///parancs = "request;D19313570A82"
+            ///először csak "request paranccsal foglalkozunk"
+            ///megnezzük hogy a "request"-e
+            ///ki kell szedni a MAC címet a parancsból
+
+            if (parancs.Contains("request"))
+            {
+                Console.WriteLine("Ez ok");
+            }
+            else
+            {
+                Console.WriteLine("Nem oké");
+            }
+
+
+
+        }
+
         static void Main(string[] args)
         {
-            BeolvasList(excluded, "excludeed.csv");
+            BeolvasList(excluded, "excluded.csv");
             BeolvasList(commands, "test.csv");
             Beolvdictionary(dhcp,"dhcp.csv");
             Beolvdictionary(reserved, "reserved.csv");
@@ -116,18 +148,18 @@ namespace dhcpSzimulacio
             //Console.WriteLine("Vége...... \n");
 
 
-            foreach (var m in commands)
-            {
-                Console.WriteLine(m);
-            }
+            //foreach (var m in commands)
+            //{
+            //    Console.WriteLine(m);
+            //}
 
 
-            Console.WriteLine("Vége...... \n");
+            
 
 
 
 
-
+            feladat("request Ebben nicns semmi");
 
 
 
